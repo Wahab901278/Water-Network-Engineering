@@ -1,0 +1,13 @@
+venv/
+*.log
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.egg-info/
+*.egg
+*.whl
+*.coverage
+*.cover
