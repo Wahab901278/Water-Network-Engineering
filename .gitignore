@@ -11,3 +11,6 @@ __pycache__/
 *.whl
 *.coverage
 *.cover
+*.inp
+*.bin
+*.rpt
