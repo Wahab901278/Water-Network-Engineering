@@ -1,4 +1,5 @@
 import wntr
+
 def add_pump_control(wn, pump_name, shut_hour, on_hour):
     pump = wn.get_link(pump_name)
     shut = wntr.network.controls.ControlAction(pump, 'status', 0)

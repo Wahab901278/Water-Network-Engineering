@@ -1,6 +1,8 @@
 import wntr
 import matplotlib.pyplot as plt
 from src.criticaljunctions import get_critical_junctions
+
+
 def simulatePipeLeakageForCriticalJunctions(wn, leak_factor, requiredPressure, threshold_population=100, threshold_wsa=0.8, title_before="WSA Before Leakage", title_after="WSA After Leakage",figure_path=""):
 
     wn.options.hydraulic.demand_model = 'PDD'

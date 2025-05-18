@@ -1,0 +1,31 @@
+{
+    "Junctions": 92,
+    "Pipes": 117,
+    "Tanks": 3,
+    "Pumps": 2,
+    "Tanks_Details": {
+        "1": {
+            "elevation": 40.203120000000006,
+            "init_level": 3.99288,
+            "max_level": 9.784080000000001
+        },
+        "2": {
+            "elevation": 35.5092,
+            "init_level": 7.162800000000001,
+            "max_level": 12.28344
+        },
+        "3": {
+            "elevation": 39.3192,
+            "init_level": 8.8392,
+            "max_level": 10.820400000000001
+        }
+    },
+    "Pumps_Details": {
+        "10": {
+            "power": "10"
+        },
+        "335": {
+            "power": "335"
+        }
+    }
+}
