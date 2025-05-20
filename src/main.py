@@ -4,6 +4,8 @@ from loader import load_network
 from analyze_pressure_and_flow import analyze_pressure_and_flow
 from criticaljunctions import get_critical_junctions ,junctionsWithPopulation
 from save_network_summary import save_network_summary
+from check_pressure_trend import check_pressure_trend_with_sorted_average
+from resilience.optimizers import search_best_resilience_parameters
 from config import *
 import os
 from disturbance.simulate_pump_control import simulatePumpControl
@@ -108,3 +110,11 @@ else:
     print("Simulation failed. Check the network configuration.")
 
 save_network_summary(NETWORK_PATH)
+
+sorted_junction_names=check_pressure_trend_with_sorted_average(NETWORK_PATH,duration_hours=48,time_step_seconds=3600)
+high_pressure_junctions=sorted_junction_names[:20:4]
+best_params = search_best_resilience_parameters(NETWORK_PATH,average_age_after_disturbance.mean(),supply_loss_percentage,pumps_in_network,low_pressure_junctions,low_flow_pipes,critical_junctions,high_pressure_junctions, trials=10)
+
+print("\nBest Resilience Configuration Found:")
+for k, v in best_params.items():
+    print(f"{k}: {v}")

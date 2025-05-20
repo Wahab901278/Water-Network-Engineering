@@ -2,17 +2,7 @@ import wntr
 from loader import load_network
 
 def analyze_pressure_and_flow(wn_file, required_pressure):
-    """
-    Analyze the pressure and flow in the network to identify potential locations for pumps and tanks.
     
-    Parameters:
-    - waterNetwork: The water network model.
-    - required_pressure: The minimum required pressure in the system.
-    
-    Returns:
-    - low_pressure_junctions: Junctions with pressure below the required level.
-    - low_flow_pipes: Pipes with flow below a certain threshold (if needed).
-    """
     waterNetwork=load_network(wn_file)
     try:
 
