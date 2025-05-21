@@ -16,8 +16,8 @@ from disturbance.calculate_supply_loss_percentage import calculate_supply_loss_p
 from disturbance.calculate_water_age import checkWaterAgeAfterDisturbances
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-NETWORK_PATH= os.path.join(base_dir, 'data', 'Net3.inp')
-
+NETWORK_PATH= os.path.join(base_dir, 'data', 'REV CITY ZONE.inp')
+RESILIENT_NETWORK_PATH=os.path.join(base_dir,'temp_networks','best_network_configuration.inp')
 NR_VISUALIZATIONS_PATH='visualizations/normal-conditions/'
 os.makedirs(NR_VISUALIZATIONS_PATH, exist_ok=True)
 
@@ -28,6 +28,23 @@ AF_VISUALIZATIONS_PATH='visualizations/after-resilience/'
 os.makedirs(AF_VISUALIZATIONS_PATH,exist_ok=True)
 
 wn=load_network(NETWORK_PATH)
+
+if len(wn.junction_name_list) < 50:
+    leak_factor = 1.05
+    aging_factor = 0.95
+    threshold_population = 25
+            
+elif len(wn.junction_name_list) < 100:
+    leak_factor = 1.2
+    aging_factor = 0.85
+    threshold_population = 50
+
+else:
+    leak_factor = 1.4
+    aging_factor = 0.8
+    threshold_population = 100
+
+        
 avg_pressure=average_pressure_cv(wn)
 print("\nThe average pressure of network is:",avg_pressure)
 
@@ -56,17 +73,17 @@ pumps_in_network=wn.pump_name_list
 simulatePumpControl(wn, pumps_in_network, shut_time=5, on_time=25, requiredPressure=avg_pressure["average_pressure"], title_before="WSA Before Power Control", title_after="WSA After Power Control",figure_path=BF_VISUALIZATIONS_PATH)
 
 # simulatePipeLeakageForCriticalJunctions(wn, leak_factor=1.4, requiredPressure=avg_pressure["average_pressure"], threshold_population=avg_population, threshold_wsa=wsa.mean(),figure_path=BF_VISUALIZATIONS_PATH)
-simulatePipeLeakageForCriticalJunctions(wn, leak_factor=1.4, requiredPressure=avg_pressure["average_pressure"], threshold_population=100, threshold_wsa=0.8,figure_path=BF_VISUALIZATIONS_PATH)
-simulateAgingInfrastructureForCriticalJunctions(wn,aging_factor=0.8, requiredPressure=avg_pressure["average_pressure"], threshold_population=100, threshold_wsa=0.8,figure_path=BF_VISUALIZATIONS_PATH)
+simulatePipeLeakageForCriticalJunctions(wn, leak_factor=leak_factor, requiredPressure=avg_pressure["average_pressure"], threshold_population=threshold_population, threshold_wsa=0.8,figure_path=BF_VISUALIZATIONS_PATH)
+simulateAgingInfrastructureForCriticalJunctions(wn,aging_factor=aging_factor, requiredPressure=avg_pressure["average_pressure"], threshold_population=threshold_population, threshold_wsa=0.8,figure_path=BF_VISUALIZATIONS_PATH)
 
 wsa_before,wsa_after,results_after=simulateCombinedDisturbances(
     NETWORK_PATH,
     pump_names=pumps_in_network, 
     shut_time=5, on_time=20, 
-    leak_factor=1.4, 
-    aging_factor=0.7,
+    leak_factor=leak_factor, 
+    aging_factor=aging_factor,
     requiredPressure=avg_pressure["average_pressure"],
-    threshold_population=100, 
+    threshold_population=threshold_population, 
     threshold_wsa=0.8, 
     title="Combined Disturbances (Pump Control, Pipe Leakage, and Aging)",
     figure_path=BF_VISUALIZATIONS_PATH
@@ -75,10 +92,10 @@ wsa_before, wsa_after, supply_loss_percentage = calculate_supply_loss_percentage
     NETWORK_PATH,
     pump_names=pumps_in_network, 
     shut_time=5, on_time=20,
-    leak_factor=1.4, 
-    aging_factor=0.8,  
+    leak_factor=leak_factor, 
+    aging_factor=aging_factor,  
     requiredPressure=avg_pressure["average_pressure"],
-    threshold_population=100,
+    threshold_population=threshold_population,
     threshold_wsa=0.8,
     title="Combined Disturbances Simulation with Supply Loss",figure_path=BF_VISUALIZATIONS_PATH
 )
@@ -89,11 +106,11 @@ average_age_after_disturbance = checkWaterAgeAfterDisturbances(
     NETWORK_PATH,
     pump_names=pumps_in_network,
     shut_time=5, on_time=20,
-    leak_factor=1.4,
-    aging_factor=0.8, 
+    leak_factor=leak_factor,
+    aging_factor=aging_factor, 
     requiredPressure=avg_pressure["average_pressure"],
     time_interval=24,  
-    threshold_population=100, 
+    threshold_population=threshold_population, 
     threshold_wsa=0.8,
     title="Water Age After Disturbances",
     folder_path=BF_VISUALIZATIONS_PATH
@@ -113,8 +130,39 @@ save_network_summary(NETWORK_PATH)
 
 sorted_junction_names=check_pressure_trend_with_sorted_average(NETWORK_PATH,duration_hours=48,time_step_seconds=3600)
 high_pressure_junctions=sorted_junction_names[:20:4]
-best_params = search_best_resilience_parameters(NETWORK_PATH,average_age_after_disturbance.mean(),supply_loss_percentage,pumps_in_network,low_pressure_junctions,low_flow_pipes,critical_junctions,high_pressure_junctions, trials=10)
+best_params = search_best_resilience_parameters(NETWORK_PATH,average_age_after_disturbance.mean(),supply_loss_percentage,pumps_in_network,low_pressure_junctions,low_flow_pipes,critical_junctions,high_pressure_junctions,avg_pressure["average_pressure"], trials=20)
 
 print("\nBest Resilience Configuration Found:")
 for k, v in best_params.items():
     print(f"{k}: {v}")
+
+
+wsa_before, wsa_after, supply_loss_percentage_resilient = calculate_supply_loss_percentage(
+    RESILIENT_NETWORK_PATH,
+    pump_names=pumps_in_network, 
+    shut_time=5, on_time=20,
+    leak_factor=best_params['leak_factor'], 
+    aging_factor=best_params['aging_factor'],  
+    requiredPressure=best_params['required_pressure'],
+    threshold_population=threshold_population,
+    threshold_wsa=0.8,
+    title="Combined Disturbances Simulation of Resilient network with Supply Loss",figure_path=AF_VISUALIZATIONS_PATH
+)
+
+print(f"Water supply loss percentage of the resilient network is: {supply_loss_percentage_resilient:.2f}%")
+
+average_age_resilient_after_disturbance = checkWaterAgeAfterDisturbances(
+    RESILIENT_NETWORK_PATH,
+    pump_names=pumps_in_network,
+    shut_time=5, on_time=20,
+    leak_factor=best_params['leak_factor'],
+    aging_factor=best_params['aging_factor'], 
+    requiredPressure=best_params['required_pressure'],
+    time_interval=24,  
+    threshold_population=threshold_population, 
+    threshold_wsa=0.8,
+    title="Water Age After Disturbances",
+    folder_path=AF_VISUALIZATIONS_PATH
+)
+
+print(f"Average water age of resilient network after disturbances: {average_age_resilient_after_disturbance.mean():.2f} hours")

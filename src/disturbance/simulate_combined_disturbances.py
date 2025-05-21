@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from .pump_control import add_pump_control
 from src.criticaljunctions import get_critical_junctions
 from src.loader import load_network
+import os
 def simulateCombinedDisturbances(wn_file, pump_names, shut_time, on_time, leak_factor, aging_factor, requiredPressure, threshold_population=100, threshold_wsa=0.8, title="WSA Before and After Combined Disturbances",figure_path=""):
     wn=load_network(wn_file)
 
@@ -58,7 +59,7 @@ def simulateCombinedDisturbances(wn_file, pump_names, shut_time, on_time, leak_f
     plt.legend()
     plt.grid(True)
     safe_title = title.replace(" ", "_").replace("/", "-")
-    plt.savefig(f"{figure_path}/{safe_title}+_combineddistubances.jpg")
+    plt.savefig(os.path.join(figure_path, f"{safe_title}_combined_disturbances.jpg"))
 
     return wsa_before,wsa_after,results_after
 

@@ -14,3 +14,6 @@ __pycache__/
 *.inp
 *.bin
 *.rpt
+*.jpg
+*.jpeg
+*.png
