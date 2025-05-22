@@ -12,7 +12,9 @@ from .add_loops_to_critical_areas import add_loops_to_critical_areas
 from .add_tanks_with_replacement import add_tanks_with_correct_placement
 from .install_prvs import install_prvs
 from src.utils import save_network_to_inp_file
-
+from src.config import REV_CITY_ZONE_AGING_FACTOR,REV_CITY_ZONE_LEAK_FACTOR,REV_CITY_ZONE_LOOP_COUNT,REV_CITY_ZONE_MAX_PUMPS,REV_CITY_ZONE_MAX_TANKS,REV_CITY_ZONE_REQUIRED_PRESSURE
+from src.config import RURAL_SIMPLE_AGING_FACTOR,RURAL_SIMPLE_LEAK_FACTOR,RURAL_SIMPLE_LOOP_COUNT,RURAL_SIMPLE_MAX_PUMPS,RURAL_SIMPLE_MAX_TANKS,RURAL_SIMPLE_REQUIRED_PRESSURE
+from src.config import REV_SIMPLE_REQUIRED_PRESSURE,REV_SIMPLE_AGING_FACTOR,REV_SIMPLE_LEAK_FACTOR,REV_SIMPLE_LOOP_COUNT,REV_SIMPLE_MAX_PUMPS,REV_SIMPLE_MAX_TANKS
 def evaluate_score(age_before, age_after, loss_before, loss_after):
     age_reduction_pct = ((age_before - age_after) / age_before) * 100
     loss_reduction_pct = ((loss_before - loss_after) / loss_before) * 100

@@ -1,12 +1,15 @@
 {
-    "Junctions": 21,
+    "Junctions": 22,
     "Pipes": 20,
     "Tanks": 0,
-    "Pumps": 1,
+    "Pumps": 2,
     "Tanks_Details": {},
     "Pumps_Details": {
         "PMP-4": {
             "power": "PMP-4"
+        },
+        "pump_J-20": {
+            "power": "pump_J-20"
         }
     }
 }

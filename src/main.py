@@ -16,7 +16,7 @@ from disturbance.calculate_supply_loss_percentage import calculate_supply_loss_p
 from disturbance.calculate_water_age import checkWaterAgeAfterDisturbances
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-NETWORK_PATH= os.path.join(base_dir, 'data', 'REV CITY ZONE.inp')
+NETWORK_PATH= os.path.join(base_dir, 'data', 'RURAL Simple.inp')
 RESILIENT_NETWORK_PATH=os.path.join(base_dir,'temp_networks','best_network_configuration.inp')
 NR_VISUALIZATIONS_PATH='visualizations/normal-conditions/'
 os.makedirs(NR_VISUALIZATIONS_PATH, exist_ok=True)
@@ -72,7 +72,6 @@ pumps_in_network=wn.pump_name_list
 
 simulatePumpControl(wn, pumps_in_network, shut_time=5, on_time=25, requiredPressure=avg_pressure["average_pressure"], title_before="WSA Before Power Control", title_after="WSA After Power Control",figure_path=BF_VISUALIZATIONS_PATH)
 
-# simulatePipeLeakageForCriticalJunctions(wn, leak_factor=1.4, requiredPressure=avg_pressure["average_pressure"], threshold_population=avg_population, threshold_wsa=wsa.mean(),figure_path=BF_VISUALIZATIONS_PATH)
 simulatePipeLeakageForCriticalJunctions(wn, leak_factor=leak_factor, requiredPressure=avg_pressure["average_pressure"], threshold_population=threshold_population, threshold_wsa=0.8,figure_path=BF_VISUALIZATIONS_PATH)
 simulateAgingInfrastructureForCriticalJunctions(wn,aging_factor=aging_factor, requiredPressure=avg_pressure["average_pressure"], threshold_population=threshold_population, threshold_wsa=0.8,figure_path=BF_VISUALIZATIONS_PATH)
 
@@ -166,3 +165,4 @@ average_age_resilient_after_disturbance = checkWaterAgeAfterDisturbances(
 )
 
 print(f"Average water age of resilient network after disturbances: {average_age_resilient_after_disturbance.mean():.2f} hours")
+save_network_summary(RESILIENT_NETWORK_PATH,output_path='resilient-network-summary.json')
