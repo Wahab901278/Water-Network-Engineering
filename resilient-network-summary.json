@@ -1,15 +1,53 @@
 {
-    "Junctions": 22,
-    "Pipes": 20,
-    "Tanks": 0,
-    "Pumps": 2,
-    "Tanks_Details": {},
+    "Junctions": 26,
+    "Pipes": 24,
+    "Tanks": 5,
+    "Pumps": 6,
+    "Tanks_Details": {
+        "tank_J-2": {
+            "elevation": 204.55,
+            "init_level": 5.0,
+            "max_level": 8.0
+        },
+        "tank_J-22": {
+            "elevation": 204.31298559,
+            "init_level": 5.0,
+            "max_level": 8.0
+        },
+        "tank_J-6": {
+            "elevation": 204.305,
+            "init_level": 5.0,
+            "max_level": 8.0
+        },
+        "tank_J-1": {
+            "elevation": 204.143,
+            "init_level": 5.0,
+            "max_level": 8.0
+        },
+        "tank_J-3": {
+            "elevation": 203.931,
+            "init_level": 5.0,
+            "max_level": 8.0
+        }
+    },
     "Pumps_Details": {
         "PMP-4": {
             "power": "PMP-4"
         },
         "pump_J-20": {
             "power": "pump_J-20"
+        },
+        "pump_J-13": {
+            "power": "pump_J-13"
+        },
+        "pump_J-2": {
+            "power": "pump_J-2"
+        },
+        "pump_J-15": {
+            "power": "pump_J-15"
+        },
+        "pump_J-1": {
+            "power": "pump_J-1"
         }
     }
 }

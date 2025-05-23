@@ -30,21 +30,29 @@ os.makedirs(AF_VISUALIZATIONS_PATH,exist_ok=True)
 wn=load_network(NETWORK_PATH)
 
 if len(wn.junction_name_list) < 50:
-    leak_factor = 1.05
-    aging_factor = 0.95
     threshold_population = 25
             
 elif len(wn.junction_name_list) < 100:
-    leak_factor = 1.2
-    aging_factor = 0.85
+
     threshold_population = 50
 
 else:
-    leak_factor = 1.4
-    aging_factor = 0.8
+
     threshold_population = 100
 
-        
+situation='UAE standards'
+
+if situation=='Emergency situation':
+    leak_factor=1.4
+    aging_factor=0.8
+elif situation=='UAE standards':
+    leak_factor=1.1
+    aging_factor=0.9
+elif situation=='Extreme Emergency situation':
+    leak_factor=1.6
+    aging_factor=0.5
+
+
 avg_pressure=average_pressure_cv(wn)
 print("\nThe average pressure of network is:",avg_pressure)
 

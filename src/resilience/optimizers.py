@@ -37,29 +37,34 @@ def search_best_resilience_parameters(network_path, age_before, loss_before, pum
 
             # Param bounds based on network size
             if node_count < 50:
-                leak_factor = 1.05
-                aging_factor = 0.95
                 pressure_range = (20, 35)
                 max_pump_range = (0, 2)
                 max_tanks = random.randint(0, 2)
                 loop_count = random.randint(0, 3)
                 threshold_population = 25
             elif node_count < 100:
-                leak_factor = 1.2
-                aging_factor = 0.9
                 pressure_range = (30, 50)
                 max_pump_range = (1, 4)
                 max_tanks = random.randint(0, 4)
                 loop_count = random.randint(2, 6)
                 threshold_population = 50
             else:
-                leak_factor = 1.4
-                aging_factor = 0.8
                 pressure_range = (30, 70)
                 max_pump_range = (3, 8)
                 max_tanks = random.randint(1, 6)
                 loop_count = random.randint(5, 12)
                 threshold_population = 100
+            situation='Emergency situation'
+
+            if situation=='Emergency situation':
+                leak_factor=1.4
+                aging_factor=0.8
+            elif situation=='UAE standards':
+                leak_factor=1.1
+                aging_factor=0.9
+            elif situation=='Extreme Emergency situation':
+                leak_factor=1.6
+                aging_factor=0.5
 
             required_pressure = round(random.uniform(*pressure_range), 1)
             max_pumps = random.randint(*max_pump_range)
